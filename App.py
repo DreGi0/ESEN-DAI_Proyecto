@@ -1,10 +1,10 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
-    QLabel, QLineEdit, QPushButton, QSpacerItem
+    QLabel, QLineEdit, QPushButton
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QCursor
 
 
 class MainWindow(QMainWindow):
@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
         self.box_usuario.setFixedWidth(150)
         self.box_pass.setFixedWidth(150)
         self.btn_ingresar.setFixedSize(150, 40)
+        self.btn_ingresar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.box_pass.setEchoMode(QLineEdit.EchoMode.Password)
         self.espaciado = QLabel()
         self.espaciado.setFixedHeight(30)
@@ -85,6 +86,7 @@ class MainWindow(QMainWindow):
         self.lay_sesion.addRow(self.lay_usuario)
         self.lay_sesion.addRow(self.lay_pass)
         self.lay_sesion.addRow(self.lay_feedback)
+        self.lay_sesion.addRow(QLabel())
         self.lay_sesion.addRow(self.lay_btn_ingresar)
         
             # Agrega elementos al contenedor general

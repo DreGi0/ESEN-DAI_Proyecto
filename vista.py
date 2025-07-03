@@ -1,10 +1,11 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
-    QLabel, QLineEdit, QPushButton
+    QLabel, QLineEdit, QPushButton, QMessageBox
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QCursor
+import controlador, db
 
 
 class MainWindow(QMainWindow):
@@ -42,11 +43,13 @@ class MainWindow(QMainWindow):
         self.bienvenida.setStyleSheet("font-size: 25px")
         self.box_usuario.setFixedWidth(150)
         self.box_pass.setFixedWidth(150)
-        self.btn_ingresar.setFixedSize(150, 40)
+        self.btn_ingresar.setFixedSize(150, 20)
         self.btn_ingresar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.box_pass.setEchoMode(QLineEdit.EchoMode.Password)
         self.espaciado = QLabel()
         self.espaciado.setFixedHeight(30)
+        
+        self.btn_ingresar.clicked.connect(db.verificar_credenciales)
         
         # Centra el título
         self.lay_titulo = QHBoxLayout()
@@ -98,6 +101,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Super Duper App")
         self.setGeometry(100, 100, 1000, 700)
     
+
     # =====================================
     # GESTION DE PRODUCTOS
     # =====================================
@@ -153,7 +157,7 @@ class MainWindow(QMainWindow):
 def main():
     """Función principal"""
     app = QApplication(sys.argv)
-    with open(r"style.qss") as archivo_estilo:
+    with open(r"style\style.qss") as archivo_estilo:
         style = archivo_estilo.read()
         app.setStyleSheet(style)
     window = MainWindow()

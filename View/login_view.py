@@ -144,9 +144,17 @@ class LoginWindow(QMainWindow):
         self.login_button.clicked.connect(self.try_login)
 
     def try_login(self):
-        """Intentar inicio de sesión"""
-        user = self.user_input.text()
-        password = self.password_input.text()
+        user = self.user_input.text().strip()
+        password = self.password_input.text().strip()
+        
+        if not user or not password:
+            self.show_feedback("Completa todos los campos")
+            return
+        
+        if len(user) < 3 or len(password) < 3:
+            self.show_feedback("Usuario y contraseña deben tener al menos 3 caracteres")
+            return
+    
         self.controller.login(user, password)
 
     def show_feedback(self, message):

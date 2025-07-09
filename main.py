@@ -5,12 +5,12 @@ from View.login_view import LoginWindow
 def main():
     app = QApplication(sys.argv)
 
-    with open(r"Resources\style.qss") as styles:
+    with open(r"Resources/style.qss") as styles:
         style = styles.read()
         app.setStyleSheet(style)
 
-    window = LoginWindow()
-    window.show()
+    ventana = LoginWindow()
+    ventana.show()
     sys.exit(app.exec())
 
 if __name__ == "__main__":

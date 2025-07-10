@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
     QFormLayout, QDialogButtonBox, QTextEdit
 )
 from PyQt6.QtCore import Qt
-from Model.db import (
+from Model.products_model import (
     get_all_products, create_product, update_product, delete_product,
     get_product_by_id, get_categories, get_units, get_suppliers,
     get_product_suppliers, assign_supplier_to_product

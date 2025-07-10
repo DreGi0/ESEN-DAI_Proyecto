@@ -1,4 +1,4 @@
-from Model.db import validate_credentials
+from Model.login_model import validate_credentials
 
 class LoginController:
     def __init__(self, view):

@@ -148,7 +148,7 @@ class StartWindow(QMainWindow):
         """Abrir ventana de facturación"""
         billing_window = BillingDialog(self)
         billing_window.exec()
-
+        
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()

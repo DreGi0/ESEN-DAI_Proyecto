@@ -1,4 +1,6 @@
-import mysql.connector
+import faulthandler
+faulthandler.enable()
+import mariadb 
 from mysql.connector import Error
 import atexit 
 
@@ -11,15 +13,15 @@ class DatabaseManager:
     def connect(self):
         """Establecer conexión con la base de datos"""
         try:
-            self.connection = mysql.connector.connect(
+            self.connection = mariadb.connect(
                 host = "localhost",
                 port = 3306,
                 user = "root",
-                password = "1234",
+                # password = "1234",
                 database = "ferreteria_monaco"
             )
-            if self.connection.is_connected():
-                print("Conectado a la base de datos")
+            # if self.connection.is_connected():
+            #     print("Conectado a la base de datos")
         except Error as e:
             print(f"Error de conexion: {e}")
             self.connection = None
@@ -32,15 +34,15 @@ class DatabaseManager:
         try:
             # Ping para verificar la conexión
             self.connection.ping(reconnect=True, attempts=3, delay=1)
-            return self.connection.is_connected()
+            # return self.connection.is_connected()
         except Error:
             return False
     
     def ensure_connection(self):
         """Asegurar que la conexión esté activa, reconectar si es necesario"""
-        if not self.is_connected():
-            print("Reconectando a la base de datos...")
-            self.connect()
+        # if not self.is_connected():
+        #     print("Reconectando a la base de datos...")
+        #     self.connect()
         return self.connection is not None
     
     def execute_query(self, query, params=None, fetch=False, fetchone=False):
@@ -71,7 +73,7 @@ class DatabaseManager:
     
     def close_connection(self):
         """Cerrar la conexión a la base de datos"""
-        if self.connection and self.connection.is_connected():
+        if self.connection: # and self.connection.is_connected():
             self.connection.close()
             print("Conexión cerrada")
 

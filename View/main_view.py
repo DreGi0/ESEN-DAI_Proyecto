@@ -2,15 +2,15 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QPushButton, QTableWidget, QTableWidgetItem, QMessageBox,
     QInputDialog, QComboBox, QLabel, QLineEdit, QDialog,
-    QFormLayout, QDialogButtonBox, QTextEdit
-)
+    QFormLayout, QDialogButtonBox, QTextEdit, QApplication
+)  # NUEVO: QApplication añadido
 from PyQt6.QtCore import Qt
 from Model.products_model import (
     get_all_products, create_product, update_product, delete_product,
     get_product_by_id, get_categories, get_units, get_suppliers,
     get_product_suppliers, assign_supplier_to_product
 )
-
+from View.billing_view import BillingDialog
 
 class ProductDialog(QDialog):
     """Dialog para crear/editar productos"""
@@ -102,6 +102,52 @@ class ProductDialog(QDialog):
             'id_unidad': self.unit_combo.currentData()
         }
 
+class StartWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.setWindowTitle("Ferretería Mónaco - Inicio")
+        self.setGeometry(200, 200, 500, 300)
+
+        central_widget = QWidget()
+        layout = QVBoxLayout(central_widget)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        title = QLabel("Selecciona un módulo")
+        title.setStyleSheet("font-size: 22px; font-weight: bold; margin-bottom: 20px;")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(30)
+
+        # Botón para la gestión de productos
+        products_btn = QPushButton("Gestión de Productos")
+        products_btn.setFixedSize(180, 50)
+        products_btn.clicked.connect(self.open_products_module)
+        button_layout.addWidget(products_btn)
+
+        # Botón para la facturación
+        billing_btn = QPushButton("Facturación")
+        billing_btn.setFixedSize(180, 50)
+        billing_btn.clicked.connect(self.open_billing_module)
+        button_layout.addWidget(billing_btn)
+
+        layout.addLayout(button_layout)
+        self.setCentralWidget(central_widget)
+
+    def open_products_module(self):
+        """Abrir ventana de gestión de productos"""
+        self.products_window = MainWindow()
+        self.products_window.show()
+        self.close()
+
+    def open_billing_module(self):
+        """Abrir ventana de facturación"""
+        billing_window = BillingDialog(self)
+        billing_window.exec()
 
 class MainWindow(QMainWindow):
     def __init__(self):

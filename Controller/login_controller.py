@@ -13,6 +13,6 @@ class LoginController:
             self.view.show_feedback("Credenciales incorrectas")
     
     def open_main_window(self):
-        from View.main_view import MainWindow
-        self.main_window = MainWindow()
+        from View.main_view import StartWindow
+        self.main_window = StartWindow()
         self.main_window.show()

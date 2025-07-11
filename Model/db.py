@@ -12,11 +12,11 @@ class DatabaseManager:
         """Establecer conexión con la base de datos"""
         try:
             self.connection = mysql.connector.connect(
-                host="localhost",
-                port=3306,
-                user="root",
-                password="1234",
-                database="Ferreteria_Monaco"
+                host = "localhost",
+                port = 3306,
+                user = "root",
+                password = "1234",
+                database = "ferreteria_monaco"
             )
             if self.connection.is_connected():
                 print("Conectado a la base de datos")

@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QApplication
 import sys
 from View.login_view import LoginWindow
+from View.main_view import MainWindow
 
 def main():
     app = QApplication(sys.argv)
@@ -9,8 +10,9 @@ def main():
         style = styles.read()
         app.setStyleSheet(style)
 
-    window = LoginWindow()
-    window.show()
+    login_window = LoginWindow()
+    login_window.show()
+
     sys.exit(app.exec())
 
 if __name__ == "__main__":

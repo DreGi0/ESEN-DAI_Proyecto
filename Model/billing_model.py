@@ -3,15 +3,11 @@ from Model.db import db_manager
 def create_invoice(tipo_factura, fecha_factura, id_cliente, id_prov, id_administrador, metodo_pago, total):
     """Crear la factura"""
     query = """
-    INSERT INTO factura (tipo_factura, fech_factura, id_cliente, id_prov, id_administrador, metodo_pago, Total)
+    INSERT INTO factura (tipo_factura, fecha_factura, id_cliente, id_prov, id_administrador, metodo_pago, Total)
     VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
-    params = (tipo_factura, fecha_factura, id_cliente, id_prov, id_administrador, metodo_pago, total)
-    result = db_manager.execute_query(query, params)
-    if result:
-        cursor = db_manager.connection.cursor()
-        return cursor.lastrowid
-    return None
+    result = db_manager.execute_query(query, (tipo_factura, tipo_factura, fecha_factura, id_cliente, id_prov, id_administrador, metodo_pago, total))
+    return result is not None and result > 0
 
 def add_invoice_detail(id_factura, id_producto_proveedor, cantidad_detalle, precio_unitario_detalle):
     """Agregar el detalle de factura"""

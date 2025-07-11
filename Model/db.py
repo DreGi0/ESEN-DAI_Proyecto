@@ -61,7 +61,7 @@ class DatabaseManager:
                 self.connection.commit()
                 return cursor.rowcount
         except Error as e:
-            print(f"❌ Error en la consulta: {e}")
+            print(f"Error en la consulta: {e}")
             if self.connection:
                 self.connection.rollback()
             return None

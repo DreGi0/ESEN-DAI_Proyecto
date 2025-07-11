@@ -6,7 +6,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QCursor
 from Controller.login_controller import LoginController
 
-
 class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -67,7 +66,7 @@ class LoginWindow(QMainWindow):
         self.welcome_label = QLabel("Inicio de sesión")
         
         # Etiquetas
-        self.user_label = QLabel("      Usuario")
+        self.user_label = QLabel("Usuario")
         self.password_label = QLabel("Contraseña")
         
         # Campos entrada

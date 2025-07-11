@@ -9,8 +9,8 @@ def main():
         style = styles.read()
         app.setStyleSheet(style)
 
-    window = LoginWindow()
-    window.show()
+    ventana = LoginWindow()
+    ventana.show()
     sys.exit(app.exec())
 
 if __name__ == "__main__":

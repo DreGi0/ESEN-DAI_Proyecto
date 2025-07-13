@@ -21,7 +21,9 @@ class InventoryController:
 
     def get_current_stock(self, id_prod):
         result = inventory_model.get_stock_by_product(id_prod)
-        return result[0] if result else 0
+        if result and result[0][0] is not None:
+            return result[0][0]
+        return 0
 
     def save_movements(self):
         fecha = datetime.now().strftime("%Y-%m-%d")

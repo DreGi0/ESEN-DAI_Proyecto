@@ -11,6 +11,7 @@ from Model.products_model import (
     get_product_suppliers, assign_supplier_to_product
 )
 from View.billing_view import BillingDialog
+from View.inventory_view import InventoryDialog
 
 class ProductDialog(QDialog):
     """Dialog para crear/editar productos"""
@@ -135,6 +136,12 @@ class StartWindow(QMainWindow):
         billing_btn.clicked.connect(self.open_billing_module)
         button_layout.addWidget(billing_btn)
 
+        # Botón para la gestión de inventario
+        inventory_btn = QPushButton("Gestión de Inventario")
+        inventory_btn.setFixedSize(180, 50)
+        inventory_btn.clicked.connect(self.open_inventory_module)
+        button_layout.addWidget(inventory_btn)
+
         layout.addLayout(button_layout)
         self.setCentralWidget(central_widget)
 
@@ -148,6 +155,13 @@ class StartWindow(QMainWindow):
         """Abrir ventana de facturación"""
         billing_window = BillingDialog(self)
         billing_window.exec()
+        
+    
+    def open_inventory_module(self):
+        """Abrir ventana de inventario"""
+        inventary_window = InventoryDialog(self)
+        inventary_window.exec()
+        
 
 class MainWindow(QMainWindow):
     def __init__(self):

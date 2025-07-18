@@ -1,7 +1,7 @@
 from Model.db import db_manager
 
 
-def get_all_products():
+def get_products():
     """
     Obtener todos los productos con sus relaciones
     

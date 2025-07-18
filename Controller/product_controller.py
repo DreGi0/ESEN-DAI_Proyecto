@@ -115,4 +115,20 @@ class ProductController:
             bool: True si la actualización fue exitosa
         """
         return product_model.update_product(id_prod, nombre, descripcion, ubicacion, precio, id_categoria, id_unidad)
+
+    # ==========================================================================
+    # PROVISIONALES
+    # ==========================================================================
     
+    def get_porduct_categories(self):
+        return product_model.get_categories()
+    
+    def get_units(self):
+        return product_model.get_units()
+    
+    def get_suppliers(self):
+        return product_model.get_suppliers()
+    
+    def assign_supplier_to_product(self, product_id, provider_id, purchase_price):
+        product_model.assign_supplier_to_product(product_id, provider_id, purchase_price)
+        

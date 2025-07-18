@@ -25,12 +25,15 @@ class ClientController:
     
     def load_client(self):
         """
-        Carga la información de un cliente específico.
-        
-        Returns:
-            dict: Información del cliente cargado
+        Devuelve todos los clientes (como lista de tuplas)
         """
-        return client_model.load_client()
+        return client_model.get_clients()
+
+    def get_all_clientes(self):
+        """
+        Alias para compatibilidad con la vista
+        """
+        return client_model.get_clients()
     
     # ==========================================================================
     # OPERACIONES DE CREACIÓN
@@ -47,7 +50,7 @@ class ClientController:
         Returns:
             bool: True si el cliente fue creado exitosamente
         """
-        return client_model.create_cliente(nombre_cliente, apellido_cliente)
+        return client_model.create_client(nombre_cliente, apellido_cliente)
     
     # ==========================================================================
     # OPERACIONES DE ACTUALIZACIÓN
@@ -81,4 +84,4 @@ class ClientController:
         Returns:
             bool: True si la eliminación fue exitosa
         """
-        return client_model.del_cliente(id_cliente)
+        return client_model.delete_client(id_cliente)

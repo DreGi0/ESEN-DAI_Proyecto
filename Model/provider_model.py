@@ -21,7 +21,7 @@ def create_provider(first_name, last_name):
     return db_manager.execute_query(query, params)
 
 
-def get_all_providers():
+def get_providers():
     """
     Obtener todos los proveedores
     
@@ -118,3 +118,38 @@ def search_providers(search_term):
     """
     search_pattern = f"%{search_term}%"
     return db_manager.execute_query(query, (search_pattern, search_pattern), fetch=True)
+
+def load_provider(provider_id=None):
+    """
+    Cargar información de un proveedor específico o todos los proveedores
+    
+    Args:
+        provider_id (int, optional): ID del proveedor específico a cargar.
+                                   Si es None, carga todos los proveedores.
+        
+    Returns:
+        dict o list: Información del proveedor o lista de proveedores
+    """
+    if provider_id is not None:
+        # Cargar un proveedor específico
+        provider = get_provider_by_id(provider_id)
+        if provider:
+            return {
+                'id': provider[0],
+                'first_name': provider[1],
+                'last_name': provider[2],
+                'full_name': f"{provider[1]} {provider[2]}"
+            }
+        return None
+    else:
+        # Cargar todos los proveedores
+        providers = get_providers()
+        return [
+            {
+                'id': provider[0],
+                'first_name': provider[1],
+                'last_name': provider[2],
+                'full_name': f"{provider[1]} {provider[2]}"
+            }
+            for provider in providers
+        ]

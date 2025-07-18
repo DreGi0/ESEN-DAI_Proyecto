@@ -20,7 +20,7 @@ def create_client(first_name, last_name):
     return db_manager.execute_query(query, params)
 
 
-def get_all_clients():
+def get_clients():
     """
     Obtener todos los clientes
     

@@ -8,7 +8,7 @@ from Controller.client_controller import ClientController
 class ClientDialog(QDialog):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.controller = ClientController()
+        self.client_controller = ClientController()
         self.setWindowTitle("Gestión de clientes -- Ferretería Mónaco")
         self.resize(700, 500)
         self.setup_interface()
@@ -136,7 +136,7 @@ class ClientDialog(QDialog):
             QMessageBox.warning(self, "Error", "Debe completar los datos antes de continuar")
             return
         
-        success = self.controller.create_client(nombre_cliente, apellido_cliente)
+        success = self.client_controller.create_client(nombre_cliente, apellido_cliente)
         
         if success:
             self.mostrar_mensaje_success("Cliente agregado correctamente.")
@@ -149,7 +149,7 @@ class ClientDialog(QDialog):
     
     def load_cliente(self):
         """Cargar clientes desde la base de datos"""    
-        cliente = self.controller.load_client()
+        cliente = self.client_controller.load_client()
         self.table.setRowCount(len(cliente))
         for row, (id_cliente, nombre_cliente, apellido_cliente) in enumerate(cliente):
             self.table.setItem(row, 0, QTableWidgetItem(str(id_cliente)))
@@ -164,7 +164,7 @@ class ClientDialog(QDialog):
         if not apellido or not nombre or not id_cliente:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.update_client(id_cliente, nombre, apellido)
+        success = self.client_controller.update_client(id_cliente, nombre, apellido)
         
         if success:
             self.mostrar_mensaje_success("Cliente actualizado correctamente.")
@@ -177,7 +177,7 @@ class ClientDialog(QDialog):
         if not id_cliente:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.remove_client(id_cliente)
+        success = self.client_controller.remove_client(id_cliente)
         
         if success:
             self.mostrar_mensaje_success("Cliente eliminado correctamente.")
@@ -246,7 +246,7 @@ class ClientDialog(QDialog):
     def cliente_ids(self):
         self.elegir_id.clear()
         self.elegir_id_del.clear()
-        cliente = self.controller.get_all_clientes()
+        cliente = self.client_controller.get_all_clientes()
         for id_cliente, _, _ in cliente:
             self.elegir_id.addItem(str(id_cliente))
             self.elegir_id_del.addItem(str(id_cliente))

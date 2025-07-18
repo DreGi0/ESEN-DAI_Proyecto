@@ -1,4 +1,5 @@
 from Model import inventory_model
+from Model import product_model
 from datetime import datetime
 
 
@@ -22,7 +23,7 @@ class InventoryController:
         Returns:
             list: Lista completa del inventario
         """
-        return inventory_model.get_inventory()
+        return inventory_model.get_inventory_history()
     
     def get_all_products(self):
         """
@@ -31,7 +32,7 @@ class InventoryController:
         Returns:
             list: Lista de todos los productos
         """
-        return inventory_model.get_all_products()
+        return product_model.get_products() ###asdjalksajldjdkasjlsdjljds
     
     def get_current_stock(self, id_prod):
         """
@@ -43,9 +44,9 @@ class InventoryController:
         Returns:
             int: Cantidad actual en stock, 0 si no existe
         """
-        result = inventory_model.get_stock_by_product(id_prod)
-        if result and result[0][0] is not None:
-            return result[0][0]
+        result = inventory_model.get_product_current_stock(id_prod)
+        if result is not None:
+            return int(result)
         return 0
     
     # ==========================================================================

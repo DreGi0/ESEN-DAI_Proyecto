@@ -3,11 +3,13 @@ from PyQt6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QSpinBox, QLineEdit, QMessageBox
 )
 from Controller.inventory_controller import InventoryController
+from Controller.product_controller import ProductController
 
 class InventoryDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.controller = InventoryController()
+        self.inventory_controller = InventoryController()
+        self.product_controller = ProductController()
         self.setWindowTitle("Gestión de Inventario -- Ferretería Mónaco")
         self.resize(700, 500)
         self.setup_interface()
@@ -67,10 +69,12 @@ class InventoryDialog(QDialog):
 
     def load_product_options(self):
         """Cargar productos en el combo"""
-        products = self.controller.get_all_products()
+        products = self.product_controller.get_products()
         self.product_combo.clear()
-    
-        for id_prod, nombre in products:
+
+        for prod in products:
+            id_prod = prod[0]      # id_prod
+            nombre = prod[1]       # nombre_prod
             self.product_combo.addItem(nombre, id_prod)
 
         if products:
@@ -85,17 +89,17 @@ class InventoryDialog(QDialog):
         tipo = self.movement_type_combo.currentText()
 
         if tipo == "Salida":
-            stock = self.controller.get_current_stock(id_prod)
+            stock = self.inventory_controller.get_current_stock(id_prod)
             if cantidad > stock:
                 QMessageBox.warning(self, "Stock insuficiente", f"Stock actual: {stock}")
                 return
 
-        self.controller.add_inventory_movement(id_prod, nombre, cantidad, tipo)
+        self.inventory_controller.add_inventory_movement(id_prod, nombre, cantidad, tipo)
         self.update_movements_table()
 
     def update_movements_table(self):
         """Refrescar tabla con los movimientos actuales"""
-        movimientos = self.controller.movements
+        movimientos = self.inventory_controller.movements
         self.movements_table.setRowCount(len(movimientos))
         for row, item in enumerate(movimientos):
             self.movements_table.setItem(row, 0, QTableWidgetItem(str(item['id_prod'])))
@@ -105,20 +109,20 @@ class InventoryDialog(QDialog):
 
     def confirm_and_save_movements(self):
         """Guardar todos los movimientos en la base de datos"""
-        if not self.controller.movements:
+        if not self.inventory_controller.movements:
             QMessageBox.warning(self, "Sin movimientos", "No hay movimientos para guardar.")
             return
         
-        self.controller.save_movements()
+        self.inventory_controller.save_movements()
         QMessageBox.information(self, "Éxito", "Movimientos registrados.")
-        self.controller.reset_movements()
+        self.inventory_controller.reset_movements()
         self.accept()
     
     def update_stock_label(self):
         """Actualizar la etiqueta de stock actual"""
         id_prod = self.product_combo.currentData()
         if id_prod:
-            stock = self.controller.get_current_stock(id_prod)
+            stock = self.inventory_controller.get_current_stock(id_prod)
             self.stock_label.setText(f"Stock actual: {stock}")
         else:
             self.stock_label.setText("Stock actual: -")

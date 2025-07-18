@@ -8,7 +8,7 @@ from Controller.provider_controller import ProviderController
 class ProviderDialog(QDialog):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.controller = ProviderController()
+        self.provider_controller = ProviderController()
         self.setWindowTitle("Gestión de proveedores -- Ferretería Mónaco")
         self.resize(700, 500)
         self.setup_interface()
@@ -135,7 +135,7 @@ class ProviderDialog(QDialog):
             QMessageBox.warning(self, "Error", "Debe completar los datos antes de continuar")
             return
         
-        success = self.controller.create_provider(nombre_prov, apellido_prov)
+        success = self.provider_controller.create_provider(nombre_prov, apellido_prov)
         
         if success:
             QMessageBox.information(self, "Éxito", "Proveedor agregado correctamente.")
@@ -148,12 +148,12 @@ class ProviderDialog(QDialog):
     
     def load_provider(self):
         """Cargar proveedores desde la base de datos"""    
-        provider = self.controller.load_provider()
-        self.table.setRowCount(len(provider))
-        for row, (id_prov, nombre_prov, apellido_prov) in enumerate(provider):
-            self.table.setItem(row, 0, QTableWidgetItem(str(id_prov)))
-            self.table.setItem(row, 1, QTableWidgetItem(str(nombre_prov)))
-            self.table.setItem(row, 2, QTableWidgetItem(str(apellido_prov)))
+        providers = self.provider_controller.load_provider()
+        self.table.setRowCount(len(providers))
+        for row, provider in enumerate(providers):
+            self.table.setItem(row, 0, QTableWidgetItem(str(provider['id'])))
+            self.table.setItem(row, 1, QTableWidgetItem(str(provider['first_name'])))
+            self.table.setItem(row, 2, QTableWidgetItem(str(provider['last_name'])))
     
     def update_provider(self):
         nombre = self.nombre_edit.text().strip()
@@ -163,7 +163,7 @@ class ProviderDialog(QDialog):
         if not apellido or not nombre or not id_prov:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.update_provider(id_prov, nombre, apellido)
+        success = self.provider_controller.update_provider(id_prov, nombre, apellido)
         
         if success:
             QMessageBox.information(self, "Éxito", "Proveedor actualizado correctamente.")
@@ -176,7 +176,7 @@ class ProviderDialog(QDialog):
         if not id_prov:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.remove_provider(id_prov)
+        success = self.provider_controller.remove_provider(id_prov)
         
         if success:
             QMessageBox.information(self, "Éxito", "Proveedor eliminado correctamente.")
@@ -245,7 +245,7 @@ class ProviderDialog(QDialog):
     def prov_ids(self):
         self.elegir_id.clear()
         self.elegir_id_del.clear()
-        prov = self.controller.get_providers()
+        prov = self.provider_controller.get_providers()
         for id_prov, _, _ in prov:
             self.elegir_id.addItem(str(id_prov))
             self.elegir_id_del.addItem(str(id_prov))

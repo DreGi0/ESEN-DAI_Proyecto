@@ -1,6 +1,8 @@
+import faulthandler
 import mysql.connector
 from mysql.connector import Error
 import atexit 
+
 
 class DatabaseManager:
     def __init__(self):

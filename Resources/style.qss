@@ -191,3 +191,13 @@ QToolTip {
     padding: 5px;
     font-size: 12px;
 }
+
+QTableWidget {
+
+}
+QTableWidget::item {
+    padding: 10px
+}
+QHeaderView::section {
+
+}

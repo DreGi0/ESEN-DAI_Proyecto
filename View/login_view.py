@@ -75,7 +75,7 @@ class LoginWindow(QMainWindow):
         self.password_input = QLineEdit()
         
         # Mensaje feedback
-        self.feedback_label = QLabel("Esta es una prueba de feedback")
+        self.feedback_label = QLabel("")
         self.feedback_label.setObjectName("feedback")
         
         # Botón ingreso

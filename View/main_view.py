@@ -8,6 +8,7 @@ from View.billing_view import BillingDialog
 from View.inventory_view import InventoryDialog
 from View.provider_view import ProviderDialog
 from View.client_view import ClientDialog
+from View.search_view import SearchDialog
 
 class StartWindow(QMainWindow):
     """Ventana principal de inicio del sistema"""
@@ -141,6 +142,25 @@ class StartWindow(QMainWindow):
         client_btn.clicked.connect(self.open_client_module)
         second_row_layout.addWidget(client_btn)
 
+        # Botón para la búsqueda de productos
+        search_btn = QPushButton("🔍 Búsqueda")
+        search_btn.setFixedSize(200, 60)
+        search_btn.setStyleSheet("""
+            QPushButton {
+                font-size: 14px;
+                font-weight: bold;
+                background-color: #e91e63;
+                color: white;
+                border: none;
+                border-radius: 8px;
+            }
+            QPushButton:hover {
+                background-color: #ff4081;
+            }
+        """)
+        search_btn.clicked.connect(self.open_search_module)
+        second_row_layout.addWidget(search_btn)
+
         # Centrar botones en la segunda fila
         second_row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -176,6 +196,11 @@ class StartWindow(QMainWindow):
         """Abrir ventana de clientes"""
         client_window = ClientDialog(self)
         client_window.exec()
+
+    def open_search_module(self):
+        """Abrir ventana de búsqueda"""
+        search_window = SearchDialog(self)
+        search_window.exec()
 
 # Mantener compatibilidad con el código existente
 MainWindow = StartWindow

@@ -13,6 +13,7 @@ from Model.products_model import (
 from View.billing_view import BillingDialog
 from View.inventory_view import InventoryDialog
 from View.provider_view import ProviderDialog
+from View.client_view import ClientDialog
 
 class ProductDialog(QDialog):
     """Dialog para crear/editar productos"""
@@ -148,6 +149,13 @@ class StartWindow(QMainWindow):
         provider_btn.setFixedSize(180, 50)
         provider_btn.clicked.connect(self.open_provider_module)
         button_layout.addWidget(provider_btn)
+        
+        # Botón para la gestión de clientes
+        client_btn = QPushButton("Clientes")
+        client_btn.setFixedSize(180, 50)
+        client_btn.clicked.connect(self.open_client_module)
+        button_layout.addWidget(client_btn)
+
 
         layout.addLayout(button_layout)
         self.setCentralWidget(central_widget)
@@ -171,9 +179,13 @@ class StartWindow(QMainWindow):
         
     def open_provider_module(self):
         """Abrir ventana de proveedores"""
-        providor_window = ProviderDialog(self)
-        providor_window.exec()
+        provider_window = ProviderDialog(self)
+        provider_window.exec()
         
+    def open_client_module(self):
+        """Abrir ventana de clientes"""
+        client_window = ClientDialog(self)
+        client_window.exec()
 
 class MainWindow(QMainWindow):
     def __init__(self):

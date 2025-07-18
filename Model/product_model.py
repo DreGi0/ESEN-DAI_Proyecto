@@ -14,14 +14,14 @@ def get_products():
     result = db_manager.execute_query(query, fetch=True)
     return result if result is not None else []
 
-def create_product(nombre, descripcion, ubicacion, precio, id_categoria, id_unidad):
+def create_product(name, description, location, price, category_id, unit_id):
     """Crear un nuevo producto"""
     query = """
         INSERT INTO producto (nombre_prod, descripcion_prod, ubicacion_prod, 
                             precio_unitario_prod, id_categoria, id_unidad_medida)
         VALUES (%s, %s, %s, %s, %s, %s)
     """
-    result = db_manager.execute_query(query, (nombre, descripcion, ubicacion, precio, id_categoria, id_unidad))
+    result = db_manager.execute_query(query, (name, description, location, price, category_id, unit_id))
     return result is not None and result > 0
 
 def update_product(id_prod, nombre, descripcion, ubicacion, precio, id_categoria, id_unidad):

@@ -29,12 +29,3 @@ def get_all_providers():
     query = "SELECT id_prov, nombre_prov, apellido_prov FROM proveedor"
     return db_manager.execute_query(query, fetch = True)
 
-def get_products_by_provider(id_prov):
-    """Obtiener los productos de un proveedor"""
-    query = """
-    SELECT pp.id_producto_proveedor, p.nombre_prod, pp.precio_compra
-    FROM producto_proveedor pp
-    JOIN producto p ON pp.id_prod = p.id_prod
-    WHERE pp.id_prov = %s
-    """
-    return db_manager.execute_query(query, (id_prov,), fetch = True)

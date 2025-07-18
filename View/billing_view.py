@@ -6,6 +6,7 @@ from Controller.billing_controller import BillingController
 from Controller.client_controller import ClientController
 from Controller.product_controller import ProductController
 from Controller.provider_controller import ProviderController
+from View.Invoice_view import InvoiceViewerDialog
 
 class BillingDialog(QDialog):
     def __init__(self, parent=None):
@@ -79,6 +80,8 @@ class BillingDialog(QDialog):
         self.cancel_btn = QPushButton("Cancelar")
         btn_layout.addWidget(self.save_btn)
         btn_layout.addWidget(self.cancel_btn)
+        self.view_btn = QPushButton("Consultar Facturas")
+        btn_layout.addWidget(self.view_btn)
         layout.addLayout(btn_layout)
 
         self.setLayout(layout)
@@ -88,6 +91,7 @@ class BillingDialog(QDialog):
         self.add_product_btn.clicked.connect(self.add_product)
         self.save_btn.clicked.connect(self.save_invoice)
         self.cancel_btn.clicked.connect(self.reject)
+        self.view_btn.clicked.connect(self.view_invoices)
 
     def load_initial_data(self):
         """Cargar clientes y proveedores desde la base"""
@@ -165,3 +169,7 @@ class BillingDialog(QDialog):
             self.accept()
         else:
             QMessageBox.critical(self, "Error", "Error al guardar la factura.")
+        
+    def view_invoices(self):
+        viewer = InvoiceViewerDialog(self)
+        viewer.exec()

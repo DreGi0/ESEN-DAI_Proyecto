@@ -88,3 +88,10 @@ class BillingController:
         # Actualizar el monto total en la factura
         billing_model.update_invoice_total(invoice_id, total_amount)
         return True
+    
+    def get_all_invoices(self):
+        return billing_model.get_all_invoices()
+    
+    def get_invoice_details(self, invoice_id):
+        return billing_model.get_invoice_details(invoice_id)
+

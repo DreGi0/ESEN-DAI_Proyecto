@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QComboBox,
-    QTableWidget, QTableWidgetItem, QSpinBox, QLineEdit, QMessageBox,
+    QTableWidget, QTableWidgetItem, QLineEdit, QMessageBox,
     QFormLayout, QTableWidget, QTableWidgetItem, QHeaderView, QWidget
 )
 from Controller.provider_controller import ProviderController
@@ -28,7 +28,7 @@ class ProviderDialog(QDialog):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)      
         self.setVisible(True)
         
-        """ Sección de creación de usuario (Create)"""  
+        """ Sección de creación de proveedor (Create)"""  
         new_prov_layout = QFormLayout()
         self.new_prov_container = QWidget()
         self.new_prov_container.setLayout(new_prov_layout)
@@ -44,12 +44,12 @@ class ProviderDialog(QDialog):
         self.btn_cancelar = QPushButton("Cancelar")
         
         # agregar al layout new para poder ocultarlo:
-        new_prov_layout.addWidget(QLabel("Agregue un nuevo cliente"))
+        new_prov_layout.addWidget(QLabel("Agregue un nuevo Proveedor"))
         new_prov_layout.addRow(self.text_nombre, self.nombre_prov)
         new_prov_layout.addRow(self.text_apellido, self.apellido_prov)
         new_prov_layout.addWidget(self.btn_crear_prov)
         
-        # Agregar un botón para agregar un cliente y mostrar el layout.
+        # Agregar un botón para agregar un proveedor y mostrar el layout.
         self.btn_new = QPushButton("Nuevo proveedor")
         self.btn_new.setFixedWidth(180)
         self.btn_cancelar.setVisible(False)

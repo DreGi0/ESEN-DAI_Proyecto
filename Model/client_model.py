@@ -8,13 +8,13 @@ def create_cliente(nombre_cliente, apellido_cliente):
     params = (nombre_cliente, apellido_cliente)
     return db_manager.execute_query(query, params)
 
-def load_cliente():
+def load_client():
     query = """
     SELECT id_cliente, nombre_cliente, apellido_cliente FROM clientes
     """
     return db_manager.execute_query(query, fetch=True)
 
-def update_cliente(id_cliente, nombre_cliente, apellido_cliente):
+def update_client(id_cliente, nombre_cliente, apellido_cliente):
         try:
             query = """
             UPDATE clientes SET nombre_cliente = %s, apellido_cliente = %s WHERE id_cliente = %s
@@ -24,7 +24,7 @@ def update_cliente(id_cliente, nombre_cliente, apellido_cliente):
         except Exception as e:
             return False
         
-def get_all_clientes():
+def get_clients():
     """Obtiene los clientes"""
     query = "SELECT id_cliente, nombre_cliente, apellido_cliente FROM clientes"
     return db_manager.execute_query(query, fetch = True)

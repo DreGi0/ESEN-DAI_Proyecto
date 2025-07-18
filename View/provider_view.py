@@ -176,7 +176,7 @@ class ProviderDialog(QDialog):
         if not id_prov:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.del_provider(id_prov)
+        success = self.controller.remove_provider(id_prov)
         
         if success:
             QMessageBox.information(self, "Éxito", "Proveedor eliminado correctamente.")
@@ -245,7 +245,7 @@ class ProviderDialog(QDialog):
     def prov_ids(self):
         self.elegir_id.clear()
         self.elegir_id_del.clear()
-        prov = self.controller.get_all_providers()
+        prov = self.controller.get_providers()
         for id_prov, _, _ in prov:
             self.elegir_id.addItem(str(id_prov))
             self.elegir_id_del.addItem(str(id_prov))

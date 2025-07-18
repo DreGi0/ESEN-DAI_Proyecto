@@ -24,11 +24,6 @@ def update_invoice_total(id_factura, total):
     params = (total, id_factura)
     return db_manager.execute_query(query, params)
 
-def get_all_clients():
-    """Obtiener los clientes"""
-    query = "SELECT id_cliente, nombre_cliente, apellido_cliente FROM cliente"
-    return db_manager.execute_query(query, fetch = True)
-
 def get_all_providers():
     """Obtiene los proveedores"""
     query = "SELECT id_prov, nombre_prov, apellido_prov FROM proveedor"

@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (
     QFormLayout, QDialogButtonBox, QTextEdit, QApplication
 )  # NUEVO: QApplication añadido
 from PyQt6.QtCore import Qt
-from Model.products_model import (
-    get_all_products, create_product, update_product, delete_product,
+from Model.product_model import (
+    get_products, create_product, update_product, delete_product,
     get_product_by_id, get_categories, get_units, get_suppliers,
     get_product_suppliers, assign_supplier_to_product
 )
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
 
     def load_products(self):
         """Cargar productos en la tabla"""
-        products = get_all_products()
+        products = get_products()
         
         # Configurar tabla
         self.products_table.setRowCount(len(products))

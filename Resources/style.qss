@@ -81,20 +81,15 @@ QPushButton {
 
 QPushButton:hover {
     background-color: #74308d;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(116, 48, 141, 0.3);
 }
 
 QPushButton:pressed {
     background-color: #5a2472;
-    transform: translateY(0px);
-    box-shadow: 0 2px 4px rgba(90, 36, 114, 0.4);
 }
 
 QPushButton:disabled {
     background-color: #bdc3c7;
     color: #7f8c8d;
-    cursor: not-allowed;
 }
 
 /* ===== CAJAS DE MENSAJE ===== */

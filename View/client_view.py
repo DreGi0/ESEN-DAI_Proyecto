@@ -136,7 +136,7 @@ class ClientDialog(QDialog):
             QMessageBox.warning(self, "Error", "Debe completar los datos antes de continuar")
             return
         
-        success = self.controller.create_cliente(nombre_cliente, apellido_cliente)
+        success = self.controller.create_client(nombre_cliente, apellido_cliente)
         
         if success:
             self.mostrar_mensaje_success("Cliente agregado correctamente.")
@@ -149,7 +149,7 @@ class ClientDialog(QDialog):
     
     def load_cliente(self):
         """Cargar clientes desde la base de datos"""    
-        cliente = self.controller.load_cliente()
+        cliente = self.controller.load_client()
         self.table.setRowCount(len(cliente))
         for row, (id_cliente, nombre_cliente, apellido_cliente) in enumerate(cliente):
             self.table.setItem(row, 0, QTableWidgetItem(str(id_cliente)))
@@ -164,7 +164,7 @@ class ClientDialog(QDialog):
         if not apellido or not nombre or not id_cliente:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.update_cliente(id_cliente, nombre, apellido)
+        success = self.controller.update_client(id_cliente, nombre, apellido)
         
         if success:
             self.mostrar_mensaje_success("Cliente actualizado correctamente.")
@@ -177,7 +177,7 @@ class ClientDialog(QDialog):
         if not id_cliente:
             QMessageBox.critical(self,"Error", "Debe completar los datos antes de continuar")
             return
-        success = self.controller.del_cliente(id_cliente)
+        success = self.controller.remove_client(id_cliente)
         
         if success:
             self.mostrar_mensaje_success("Cliente eliminado correctamente.")

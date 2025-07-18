@@ -24,7 +24,7 @@ def update_provider(id_prov, nombre_prov, apellido_prov):
         except Exception as e:
             return False
         
-def get_all_providers():
+def get_providers():
     """Obtiene los proveedores"""
     query = "SELECT id_prov, nombre_prov, apellido_prov FROM proveedor"
     return db_manager.execute_query(query, fetch = True)

@@ -1,6 +1,6 @@
 from Model.db import db_manager
 
-def get_all_products():
+def get_products():
     """Obtener todos los productos con sus relaciones"""
     query = """
         SELECT p.id_prod, p.nombre_prod, p.descripcion_prod, 
@@ -63,6 +63,16 @@ def get_product_by_id(id_prod):
         WHERE p.id_prod = %s
     """
     return db_manager.execute_query(query, (id_prod,), fetchone=True)
+
+def get_products_by_provider(id_prov):
+    """Obtiener los productos de un proveedor"""
+    query = """
+    SELECT pp.id_producto_proveedor, p.nombre_prod, pp.precio_compra
+    FROM producto_proveedor pp
+    JOIN producto p ON pp.id_prod = p.id_prod
+    WHERE pp.id_prov = %s
+    """
+    return db_manager.execute_query(query, (id_prov,), fetch = True)
 
 def get_product_suppliers(id_prod):
     """Obtener proveedores de un producto específico"""

@@ -3,11 +3,17 @@ from PyQt6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QSpinBox, QLineEdit, QMessageBox
 )
 from Controller.billing_controller import BillingController
+from Controller.client_controller import ClientController
+from Controller.product_controller import ProductController
+from Controller.provider_controller import ProviderController
 
 class BillingDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.controller = BillingController()
+        self.billing_controller = BillingController()
+        self.client_controller = ClientController()
+        self.product_controller = ProductController()
+        self.provider_controller = ProviderController()
         self.setWindowTitle("Gestión de Facturación")
         self.resize(700, 500)
         self.setup_ui()
@@ -85,8 +91,8 @@ class BillingDialog(QDialog):
 
     def load_initial_data(self):
         """Cargar clientes y proveedores desde la base"""
-        self.clients = self.controller.get_clients()
-        self.providers = self.controller.get_providers()
+        self.clients = self.client_controller.get_clients()
+        self.providers = self.provider_controller.get_providers()
         self.on_tipo_changed(self.tipo_combo.currentText())
 
     def on_tipo_changed(self, tipo):
@@ -115,7 +121,7 @@ class BillingDialog(QDialog):
         id_prov = self.prov_combo.currentData()
         self.prod_combo.clear()
         if id_prov:
-            products = self.controller.get_products_for_provider(id_prov)
+            products = self.product_controller.get_products_by_provider(id_prov)
             for prod in products:
                 self.prod_combo.addItem(f"{prod[1]} - ${prod[2]:.2f}", (prod[0], prod[2]))
 
@@ -124,13 +130,13 @@ class BillingDialog(QDialog):
         id_pp, precio_unitario_detalle = self.prod_combo.currentData()
         nombre_prod = self.prod_combo.currentText()
         cantidad_detalle = self.qty_spin.value()
-        self.controller.add_product_to_invoice(id_pp, nombre_prod, cantidad_detalle, precio_unitario_detalle)
+        self.billing_controller.add_product_to_invoice(id_pp, nombre_prod, cantidad_detalle, precio_unitario_detalle)
         self.refresh_products_table()
         self.update_total()
 
     def refresh_products_table(self):
         """Actualizar la tabla que muestra los productos añadidos a la factura"""
-        items = self.controller.invoice_products
+        items = self.billing_controller.invoice_products
         self.products_table.setRowCount(len(items))
         for row, item in enumerate(items):
             self.products_table.setItem(row, 0, QTableWidgetItem(str(item['id_producto_proveedor'])))
@@ -140,7 +146,7 @@ class BillingDialog(QDialog):
 
     def update_total(self):
         """Calcular y mostrar el total de la factura"""
-        total = self.controller.calculate_total()
+        total = self.billing_controller.calculate_total()
         self.total_label.setText(f"${total:.2f}")
 
     def save_invoice(self):
@@ -152,10 +158,10 @@ class BillingDialog(QDialog):
         if not metodo_pago:
             QMessageBox.warning(self, "Error", "Ingrese método de pago.")
             return
-        success = self.controller.save_invoice(tipo, id_cliente, id_prov, metodo_pago)
+        success = self.billing_controller.save_invoice(tipo, id_cliente, id_prov, metodo_pago)
         if success:
             QMessageBox.information(self, "Éxito", "Factura guardada correctamente.")
-            self.controller.reset_invoice()
+            self.billing_controller.reset_invoice()
             self.accept()
         else:
             QMessageBox.critical(self, "Error", "Error al guardar la factura.")

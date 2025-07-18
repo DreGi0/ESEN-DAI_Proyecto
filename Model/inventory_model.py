@@ -9,7 +9,7 @@ def insert_inventory_movement(id_prod, cantidad, fecha_actualizacion, tipo_movim
     params = (id_prod, cantidad, fecha_actualizacion, tipo_movimiento)
     return db_manager.execute_query(query, params)
 
-def get_all_inventory():
+def get_inventory():
     """Obtener todos los movimientos de inventario con información de producto"""
     query = """
     SELECT 

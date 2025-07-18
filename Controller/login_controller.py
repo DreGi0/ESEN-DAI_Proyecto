@@ -1,10 +1,9 @@
-from Model.login_model import validate_credentials
+from Model.login_model import validate_credentials, get_admin_by_credentials
 
 
 class LoginController:
     """
     Controlador para manejar el proceso de autenticación de usuarios.
-    Gestiona el inicio de sesión y la navegación a la ventana principal.
     """
     
     def __init__(self, view):

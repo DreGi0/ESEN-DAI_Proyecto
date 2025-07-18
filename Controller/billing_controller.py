@@ -5,7 +5,6 @@ from datetime import datetime
 class BillingController:
     """
     Controlador para manejar todas las operaciones de facturación.
-    Gestiona la creación de facturas, productos, y procesamientos de pago.
     """
     
     def __init__(self):

@@ -5,25 +5,29 @@ import atexit
 
 
 class DatabaseManager:
+    """Gestor de base de datos para MySQL con reconexión automática"""
+    
     def __init__(self):
+        """Inicializar el gestor de base de datos"""
         self.connection = None
         self.connect()
-        atexit.register(self.close_connection) #Esto sirve para llamar a la desconexion de la base de datos cuando se pare la app
+        # Registrar función para cerrar conexión al terminar la aplicación
+        atexit.register(self.close_connection) 
     
     def connect(self):
-        """Establecer conexión con la base de datos"""
+        """Establecer conexión con la base de datos MySQL"""
         try:
             self.connection = mysql.connector.connect(
-                host = "localhost",
-                port = 3306,
-                user = "root",
-                password = "1234",
-                database = "ferreteria_monaco"
+                host="localhost",
+                port=3306,
+                user="root",
+                password="1234",
+                database="ferreteria_monaco"
             )
             if self.connection.is_connected():
                 print("Conectado a la base de datos")
         except Error as e:
-            print(f"Error de conexion: {e}")
+            print(f"Error de conexión: {e}")
             self.connection = None
     
     def is_connected(self):
@@ -46,7 +50,18 @@ class DatabaseManager:
         return self.connection is not None
     
     def execute_query(self, query, params=None, fetch=False, fetchone=False):
-        """Ejecutar una consulta de forma segura"""
+        """
+        Ejecutar una consulta de forma segura
+        
+        Args:
+            query (str): Consulta SQL a ejecutar
+            params (tuple): Parámetros para la consulta
+            fetch (bool): Si debe retornar todos los resultados
+            fetchone (bool): Si debe retornar solo un resultado
+            
+        Returns:
+            Resultados de la consulta o None si hay error
+        """
         if not self.ensure_connection():
             return None
         
@@ -77,14 +92,19 @@ class DatabaseManager:
             self.connection.close()
             print("Conexión cerrada")
 
+
 # Instancia global del gestor de base de datos
 db_manager = DatabaseManager()
 
-# ====== FUNCIONES PARA MANEJO MANUAUL DE LA BASE DE DATOS ======
+
+# ==========================================================================
+# FUNCIONES PARA MANEJO MANUAL DE LA BASE DE DATOS
+# ==========================================================================
 
 def close_database_connection():
     """Cerrar la conexión manualmente"""
     db_manager.close_connection()
+
 
 def reconnect_database():
     """Reconectar a la base de datos manualmente"""

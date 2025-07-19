@@ -10,8 +10,9 @@ def main():
         style = styles.read()
         app.setStyleSheet(style)
 
+    main_window = MainWindow()
     login_window = LoginWindow()
-    login_window.show()
+    main_window.show()
 
     sys.exit(app.exec())
 

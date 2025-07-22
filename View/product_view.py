@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QPushButton, QTableWidget, QTableWidgetItem, QMessageBox,
     QInputDialog, QComboBox, QLabel, QLineEdit, QDialog,
-    QFormLayout, QDialogButtonBox, QTextEdit
+    QFormLayout, QDialogButtonBox, QTextEdit, QHeaderView, QSizePolicy, QAbstractScrollArea
 )
 from PyQt6.QtCore import Qt
 from Controller.product_controller import ProductController
@@ -32,10 +32,14 @@ class ProductDialog(QDialog):
         
         # Campos del formulario
         self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Ej: Tornillo")
         self.description_input = QTextEdit()
         self.description_input.setMaximumHeight(80)
+        self.description_input.setPlaceholderText("Ej: Tornillo de acero inoxidable")
         self.location_input = QLineEdit()
+        self.location_input.setPlaceholderText("Ej: Pasillo 1")
         self.price_input = QLineEdit()
+        self.price_input.setPlaceholderText("Ej: 12.50")
         self.category_combo = QComboBox()
         self.unit_combo = QComboBox()
         
@@ -118,8 +122,10 @@ class ProductWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         
-        # Layout principal
+        # Layout principal con márgenes y espaciado
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(30, 30, 30, 30)
+        main_layout.setSpacing(20)
         central_widget.setLayout(main_layout)
         
         # Título
@@ -127,9 +133,17 @@ class ProductWindow(QMainWindow):
         title.setStyleSheet("font-size: 24px; font-weight: bold; margin: 10px;")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(title)
+
+        # Descripción
+        desc_label = QLabel("Administra los productos de la ferretería. "
+                            "Puedes crear, editar, eliminar productos y gestionar sus proveedores.")
+        desc_label.setWordWrap(True)
+        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
+        main_layout.addWidget(desc_label)
         
         # Botones de acción
         button_layout = QHBoxLayout()
+        button_layout.setSpacing(18)
         
         self.create_btn = QPushButton("Crear Producto")
         self.edit_btn = QPushButton("Editar Producto")
@@ -138,6 +152,16 @@ class ProductWindow(QMainWindow):
         self.suppliers_btn = QPushButton("Gestionar Proveedores")
         self.refresh_btn = QPushButton("Actualizar Lista")
         self.back_btn = QPushButton("Volver al Menú")
+        
+        # Ajustar tamaño mínimo y política de expansión para los botones
+        for btn in [
+            self.create_btn, self.edit_btn, self.delete_btn, self.view_btn,
+            self.suppliers_btn, self.refresh_btn, self.back_btn
+        ]:
+            btn.setMinimumWidth(220)  # Aumenta el ancho mínimo
+            btn.setMaximumWidth(300)  # Opcional: limita el ancho máximo
+            btn.setMinimumHeight(48)
+            btn.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
         button_layout.addWidget(self.create_btn)
         button_layout.addWidget(self.edit_btn)
@@ -151,6 +175,13 @@ class ProductWindow(QMainWindow):
         
         # Tabla de productos
         self.products_table = QTableWidget()
+        self.products_table.setMinimumWidth(1100)
+        self.products_table.setMinimumHeight(400)
+        self.products_table.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.products_table.setShowGrid(True)
+        # Selección por fila completa y solo una fila a la vez
+        self.products_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.products_table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
         main_layout.addWidget(self.products_table)
         
         # Conectar señales
@@ -169,15 +200,12 @@ class ProductWindow(QMainWindow):
     def load_products(self):
         """Cargar productos en la tabla"""
         products = self.product_controller.get_products()
-        
-        # Configurar tabla
+        self.products_table.clearContents()
         self.products_table.setRowCount(len(products))
         self.products_table.setColumnCount(6)
         self.products_table.setHorizontalHeaderLabels([
             "ID", "Nombre", "Descripción", "Precio", "Ubicación", "Categoría"
         ])
-        
-        # Llenar tabla
         for row, product in enumerate(products):
             self.products_table.setItem(row, 0, QTableWidgetItem(str(product[0])))
             self.products_table.setItem(row, 1, QTableWidgetItem(product[1]))
@@ -185,9 +213,22 @@ class ProductWindow(QMainWindow):
             self.products_table.setItem(row, 3, QTableWidgetItem(f"${product[3]:.2f}"))
             self.products_table.setItem(row, 4, QTableWidgetItem(product[4]))
             self.products_table.setItem(row, 5, QTableWidgetItem(product[5] or "Sin categoría"))
-        
-        # Ajustar columnas
-        self.products_table.resizeColumnsToContents()
+        # Ajustar columnas: expandir todas proporcionalmente
+        header = self.products_table.horizontalHeader()
+        for col in range(self.products_table.columnCount()):
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+        # Centrar texto en encabezados y celdas
+        for col in range(self.products_table.columnCount()):
+            item = self.products_table.horizontalHeaderItem(col)
+            if item:
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        for row in range(self.products_table.rowCount()):
+            for col in range(self.products_table.columnCount()):
+                cell = self.products_table.item(row, col)
+                if cell:
+                    cell.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        # Mostrar el número de filas correctamente en el encabezado vertical
+        self.products_table.setVerticalHeaderLabels([str(i+1) for i in range(len(products))])
 
     def create_product(self):
         """Crear nuevo producto"""

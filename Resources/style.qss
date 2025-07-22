@@ -70,13 +70,14 @@ QPushButton {
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 14px;
+    padding: 12px 32px; /* Aumenta el padding horizontal */
+    font-size: 15px;    /* Aumenta el tamaño de fuente */
     font-weight: 600;
-    min-width: 120px;
-    min-height: 40px;
-    text-transform: uppercase;
+    min-width: 150px;   /* Aumenta el ancho mínimo */
+    min-height: 44px;   /* Aumenta el alto mínimo */
+    text-transform: none; /* Elimina mayúsculas forzadas */
     letter-spacing: 0.5px;
+    white-space: normal; /* Permite varias líneas si es necesario */
 }
 
 QPushButton:hover {
@@ -188,11 +189,31 @@ QToolTip {
 }
 
 QTableWidget {
-
+    background-color: #fffef6;
+    border: 1px solid #e8d5d5;
+    border-radius: 8px;
+    font-size: 15px;
+    selection-background-color: #e6e6fa;
+    selection-color: #2c3e50;
+    gridline-color: #e8d5d5;
 }
+
 QTableWidget::item {
-    padding: 10px
+    padding: 10px;
+    font-size: 15px;
+    color: #2c3e50;
 }
-QHeaderView::section {
 
+QTableWidget::item:selected {
+    background-color: #b3c6e7;
+    color: #2c3e50;
+}
+
+QHeaderView::section {
+    background-color: #f8f1f1;
+    color: #2b3c56;
+    font-weight: bold;
+    font-size: 15px;
+    border: 1px solid #e8d5d5;
+    padding: 8px;
 }

@@ -131,4 +131,15 @@ class ProductController:
     
     def assign_supplier_to_product(self, product_id, provider_id, purchase_price):
         product_model.assign_supplier_to_product(product_id, provider_id, purchase_price)
-        
+
+    def delete_product(self, product_id):
+        """
+        Elimina un producto de la base de datos.
+
+        Args:
+            product_id (int): ID del producto a eliminar
+
+        Returns:
+            bool: True si la eliminación fue exitosa
+        """
+        return product_model.delete_product(product_id)

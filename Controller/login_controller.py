@@ -29,7 +29,7 @@ class LoginController:
         """
         if validate_credentials(user, password):
             self.view.show_feedback("Iniciando sesión")
-            self.view.close()
+            self.view.hide()
             self.open_main_window()
         else:
             self.view.show_feedback("Credenciales incorrectas")

@@ -4,117 +4,120 @@ from PyQt6.QtWidgets import (
     QFormLayout, QTableWidget, QTableWidgetItem, QHeaderView, QWidget
 )
 from Controller.provider_controller import ProviderController
+from PyQt6.QtCore import Qt
 
 class ProviderDialog(QDialog):
     def __init__(self, parent = None):
         super().__init__(parent)
         self.provider_controller = ProviderController()
         self.setWindowTitle("Gestión de proveedores -- Ferretería Mónaco")
-        self.resize(700, 500)
+        self.resize(700, 650)  # Más alto
         self.setup_interface()
         self.load_provider()
         
     def setup_interface(self):
         layout = QVBoxLayout()
         layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(5)
-                
-        """ Sección de visualización (Read)""" 
+        layout.setSpacing(10)
+
+        # --- Descripción ---
+        desc_label = QLabel("Gestiona los proveedores de la ferretería. "
+                            "Puedes registrar nuevos proveedores, editar o eliminar los existentes.")
+        desc_label.setWordWrap(True)
+        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
+        layout.addWidget(desc_label)
+
+        # --- Tabla de proveedores (Read) ---
         self.table = QTableWidget()
+        self.table.setMinimumWidth(600)
+        self.table.setMinimumHeight(320)
         self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido"]) 
-        self.table.setMinimumHeight(300) 
-        self.table.horizontalHeader().setStretchLastSection(True)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)      
+        self.table.setHorizontalHeaderLabels(["ID", "Nombre", "Apellido"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
         self.setVisible(True)
         
-        """ Sección de creación de proveedor (Create)"""  
+        # --- Sección de creación de proveedor (Create) ---
         new_prov_layout = QFormLayout()
         self.new_prov_container = QWidget()
         self.new_prov_container.setLayout(new_prov_layout)
         self.new_prov_container.setVisible(False)
-        
         self.text_nombre = QLabel("Nombre:")
         self.nombre_prov = QLineEdit()
-        
+        self.nombre_prov.setPlaceholderText("Ej: Carlos")
         self.text_apellido = QLabel("Apellido:")
         self.apellido_prov = QLineEdit()
-        
+        self.apellido_prov.setPlaceholderText("Ej: López")
         self.btn_crear_prov = QPushButton("Agregar proveedor")
         self.btn_cancelar = QPushButton("Cancelar")
-        
-        # agregar al layout new para poder ocultarlo:
+        self.btn_cancelar.setVisible(False)
+        self.btn_cancelar.setFixedWidth(150)
+        self.btn_cancelar.setStyleSheet("background-color: red; color: white")
         new_prov_layout.addWidget(QLabel("Agregue un nuevo Proveedor"))
         new_prov_layout.addRow(self.text_nombre, self.nombre_prov)
         new_prov_layout.addRow(self.text_apellido, self.apellido_prov)
         new_prov_layout.addWidget(self.btn_crear_prov)
         
-        # Agregar un botón para agregar un proveedor y mostrar el layout.
-        self.btn_new = QPushButton("Nuevo proveedor")
-        self.btn_new.setFixedWidth(180)
-        self.btn_cancelar.setVisible(False)
-        self.btn_cancelar.setFixedWidth(150)
-        self.btn_cancelar.setStyleSheet("background-color: red; color: white")
-                
-        """ Sección actualizar (Update)"""
-        
+        # --- Sección actualizar (Update) ---
         self.btn_edit = QPushButton("Editar")
-        self.btn_edit.setFixedWidth(150)        
-        
-        # Crear layout edit para poder ocultarlo
+        self.btn_edit.setFixedWidth(150)
         self.edit_lay = QFormLayout()
         self.edit_container = QWidget()
         self.edit_container.setLayout(self.edit_lay)
         self.edit_container.setVisible(False)
-        
         self.elegir_id = QComboBox()
         self.nombre_edit = QLineEdit()
+        self.nombre_edit.setPlaceholderText("Ej: Carlos")
         self.apellido_edit = QLineEdit()
+        self.apellido_edit.setPlaceholderText("Ej: López")
         self.btn_actualizar = QPushButton("Actualizar")
         self.btn_actualizar.setFixedWidth(150)
-        
-        # agregar al contenedor edit
         self.edit_lay.addWidget(QLabel("Elige el proveedor que quieres editar"))
         self.edit_lay.addRow(QLabel("ID:"),self.elegir_id )
         self.edit_lay.addRow(QLabel("Nombre:"), self.nombre_edit)
         self.edit_lay.addRow(QLabel("Apellido:"), self.apellido_edit)
         self.edit_lay.addWidget(self.btn_actualizar)
                         
-        """ Sección Eliminar (Delete)"""
-        
+        # --- Sección Eliminar (Delete) ---
         self.btn_del = QPushButton("Eliminar")
         self.btn_del.setFixedWidth(150)
-        
-        # Crear layout Delete para poder ocultarlo
         self.del_lay = QFormLayout()
         self.del_container = QWidget()
         self.del_container.setLayout(self.del_lay)
         self.del_container.setVisible(False)
-        
         self.elegir_id_del = QComboBox()
         self.btn_eliminar = QPushButton("Eliminar registro")
-        self.btn_eliminar.setFixedWidth(150)  
+        self.btn_eliminar.setFixedWidth(150)
+        self.del_lay.addWidget(QLabel("Elige el proveedor que deseas eliminar"))
+        self.del_lay.addRow(QLabel("ID:"), self.elegir_id_del)
+        self.del_lay.addWidget(self.btn_eliminar)
         
-        # agregar al layout delete
-        self.del_lay.addRow(QLabel("ID:"), self.elegir_id_del)   
-        self.del_lay.addWidget(self.btn_eliminar)  
-        
-        # Agregar botones al layout
+        # --- Botones principales ---
+        self.btn_new = QPushButton("Nuevo proveedor")
+        self.btn_new.setFixedWidth(180)
         self.lay_btn = QHBoxLayout()
+        self.lay_btn.setSpacing(20)
         self.container_btn = QWidget()
         self.container_btn.setLayout(self.lay_btn)
-        
         self.lay_btn.addWidget(self.btn_new)
         self.lay_btn.addWidget(self.btn_edit)
         self.lay_btn.addWidget(self.btn_del)
         
-        # Agregar al layout principal
+        # --- Agregar al layout principal ---
         layout.addWidget(self.new_prov_container)
         layout.addWidget(self.table)
         layout.addWidget(self.container_btn)
         layout.addWidget(self.edit_container)
         layout.addWidget(self.del_container)
         layout.addWidget(self.btn_cancelar)
+
+        # Botón regresar (idéntico a clientes)
+        self.btn_regresar = QPushButton("Regresar")
+        self.btn_regresar.setStyleSheet("background-color: #e74c3c; color: white;")
+        self.btn_regresar.setMinimumHeight(48)
+        self.btn_regresar.clicked.connect(self.close)
+        layout.addWidget(self.btn_regresar)
 
         self.setLayout(layout)
         
@@ -149,11 +152,28 @@ class ProviderDialog(QDialog):
     def load_provider(self):
         """Cargar proveedores desde la base de datos"""    
         providers = self.provider_controller.load_provider()
+        self.table.clearContents()
         self.table.setRowCount(len(providers))
         for row, provider in enumerate(providers):
             self.table.setItem(row, 0, QTableWidgetItem(str(provider['id'])))
             self.table.setItem(row, 1, QTableWidgetItem(str(provider['first_name'])))
             self.table.setItem(row, 2, QTableWidgetItem(str(provider['last_name'])))
+        self.table.resizeColumnsToContents()
+        header = self.table.horizontalHeader()
+        for col in range(self.table.columnCount()):
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+        # Centrar texto en encabezados y celdas
+        for col in range(self.table.columnCount()):
+            item = self.table.horizontalHeaderItem(col)
+            if item:
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        for row in range(self.table.rowCount()):
+            for col in range(self.table.columnCount()):
+                cell = self.table.item(row, col)
+                if cell:
+                    cell.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        # Mostrar el número de filas correctamente en el encabezado vertical
+        self.table.setVerticalHeaderLabels([str(i+1) for i in range(len(providers))])
     
     def update_provider(self):
         nombre = self.nombre_edit.text().strip()

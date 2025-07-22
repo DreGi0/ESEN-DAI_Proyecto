@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-    QPushButton, QLabel, QApplication
+    QMainWindow, QWidget, QVBoxLayout, QGridLayout,
+    QPushButton, QLabel, QSizePolicy
 )
 from PyQt6.QtCore import Qt
 from View.product_view import ProductWindow
@@ -18,158 +18,82 @@ class StartWindow(QMainWindow):
 
     def setup_ui(self):
         self.setWindowTitle("Ferretería Mónaco - Inicio")
-        self.setGeometry(200, 200, 800, 400)
+        self.setGeometry(200, 200, 800, 500)
 
         central_widget = QWidget()
         layout = QVBoxLayout(central_widget)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.setContentsMargins(40, 40, 40, 40)
+        layout.setSpacing(30)
 
         # Título principal
-        title = QLabel("Sistema de Gestión - Ferretería Mónaco")
-        title.setStyleSheet("font-size: 28px; font-weight: bold; margin-bottom: 30px; color: #2c3e50;")
+        title = QLabel("Sistema de Gestión\nFerretería Mónaco")
+        title.setStyleSheet("font-size: 28px; font-weight: bold; margin-bottom: 10px; color: #2c3e50;")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
 
         # Subtítulo
         subtitle = QLabel("Selecciona un módulo para comenzar")
-        subtitle.setStyleSheet("font-size: 16px; margin-bottom: 40px; color: #7f8c8d;")
+        subtitle.setStyleSheet("font-size: 16px; margin-bottom: 20px; color: #7f8c8d;")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(subtitle)
 
-        # Layout para botones en dos filas
-        buttons_main_layout = QVBoxLayout()
-        
-        # Primera fila de botones
-        first_row_layout = QHBoxLayout()
-        first_row_layout.setSpacing(20)
-        
-        # Botón para la gestión de productos
-        products_btn = QPushButton("📦 Gestión de Productos")
-        products_btn.setFixedSize(200, 60)
-        products_btn.setStyleSheet("""
+        # Botones en grid
+        grid = QGridLayout()
+        grid.setSpacing(20)
+        button_style = """
             QPushButton {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #3498db;
+                font-size: 15px;
+                font-weight: 500;
+                background-color: #2b3c56;
                 color: white;
                 border: none;
                 border-radius: 8px;
+                min-width: 180px;
+                min-height: 50px;
             }
             QPushButton:hover {
-                background-color: #2980b9;
+                background-color: #3d4d6a;
             }
-        """)
-        products_btn.clicked.connect(self.open_products_module)
-        first_row_layout.addWidget(products_btn)
+        """
 
-        # Botón para la facturación
-        billing_btn = QPushButton("💰 Facturación")
-        billing_btn.setFixedSize(200, 60)
-        billing_btn.setStyleSheet("""
+        btns = [
+            ("Gestión de Productos", self.open_products_module),
+            ("Facturación", self.open_billing_module),
+            ("Inventario", self.open_inventory_module),
+            ("Proveedores", self.open_provider_module),
+            ("Clientes", self.open_client_module),
+            ("Búsqueda", self.open_search_module),
+        ]
+        positions = [(i, j) for i in range(2) for j in range(3)]
+        for pos, (text, slot) in zip(positions, btns):
+            btn = QPushButton(text)
+            btn.setStyleSheet(button_style)
+            btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+            btn.clicked.connect(slot)
+            grid.addWidget(btn, *pos)
+
+        layout.addLayout(grid)
+
+        # Botón cerrar sesión
+        logout_btn = QPushButton("Cerrar sesión")
+        logout_btn.setStyleSheet("""
             QPushButton {
                 font-size: 14px;
-                font-weight: bold;
-                background-color: #27ae60;
-                color: white;
+                background-color: #aab2bd;
+                color: #2c3e50;
                 border: none;
                 border-radius: 8px;
+                min-width: 180px;
+                min-height: 40px;
             }
             QPushButton:hover {
-                background-color: #229954;
+                background-color: #cfd8dc;
             }
         """)
-        billing_btn.clicked.connect(self.open_billing_module)
-        first_row_layout.addWidget(billing_btn)
+        logout_btn.clicked.connect(self.logout)
+        layout.addWidget(logout_btn, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # Botón para la gestión de inventario
-        inventory_btn = QPushButton("📊 Gestión de Inventario")
-        inventory_btn.setFixedSize(200, 60)
-        inventory_btn.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #e74c3c;
-                color: white;
-                border: none;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background-color: #c0392b;
-            }
-        """)
-        inventory_btn.clicked.connect(self.open_inventory_module)
-        first_row_layout.addWidget(inventory_btn)
-
-        # Segunda fila de botones
-        second_row_layout = QHBoxLayout()
-        second_row_layout.setSpacing(20)
-        
-        # Botón para la gestión de proveedores
-        provider_btn = QPushButton("🏢 Proveedores")
-        provider_btn.setFixedSize(200, 60)
-        provider_btn.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #9b59b6;
-                color: white;
-                border: none;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background-color: #8e44ad;
-            }
-        """)
-        provider_btn.clicked.connect(self.open_provider_module)
-        second_row_layout.addWidget(provider_btn)
-        
-        # Botón para la gestión de clientes
-        client_btn = QPushButton("👥 Clientes")
-        client_btn.setFixedSize(200, 60)
-        client_btn.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #f39c12;
-                color: white;
-                border: none;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background-color: #e67e22;
-            }
-        """)
-        client_btn.clicked.connect(self.open_client_module)
-        second_row_layout.addWidget(client_btn)
-
-        # Botón para la búsqueda de productos
-        search_btn = QPushButton("🔍 Búsqueda")
-        search_btn.setFixedSize(200, 60)
-        search_btn.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #e91e63;
-                color: white;
-                border: none;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background-color: #ff4081;
-            }
-        """)
-        search_btn.clicked.connect(self.open_search_module)
-        second_row_layout.addWidget(search_btn)
-
-        # Centrar botones en la segunda fila
-        second_row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Agregar layouts de botones
-        buttons_main_layout.addLayout(first_row_layout)
-        buttons_main_layout.addSpacing(20)
-        buttons_main_layout.addLayout(second_row_layout)
-
-        layout.addLayout(buttons_main_layout)
         self.setCentralWidget(central_widget)
 
     def open_products_module(self):
@@ -181,17 +105,17 @@ class StartWindow(QMainWindow):
         """Abrir ventana de facturación"""
         billing_window = BillingDialog(self)
         billing_window.exec()
-        
+
     def open_inventory_module(self):
         """Abrir ventana de inventario"""
         inventory_window = InventoryDialog(self)
         inventory_window.exec()
-        
+
     def open_provider_module(self):
         """Abrir ventana de proveedores"""
         provider_window = ProviderDialog(self)
         provider_window.exec()
-        
+
     def open_client_module(self):
         """Abrir ventana de clientes"""
         client_window = ClientDialog(self)
@@ -201,6 +125,12 @@ class StartWindow(QMainWindow):
         """Abrir ventana de búsqueda"""
         search_window = SearchDialog(self)
         search_window.exec()
+
+    def logout(self):
+        self.close()
+        from View.login_view import LoginWindow
+        self.login_window = LoginWindow()
+        self.login_window.show()
 
 # Mantener compatibilidad con el código existente
 MainWindow = StartWindow

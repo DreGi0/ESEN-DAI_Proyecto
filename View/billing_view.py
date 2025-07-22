@@ -1,7 +1,9 @@
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QComboBox,
-    QTableWidget, QTableWidgetItem, QSpinBox, QLineEdit, QMessageBox
+    QTableWidget, QTableWidgetItem, QSpinBox, QLineEdit, QMessageBox,
+    QHeaderView
 )
+from PyQt6.QtCore import Qt
 from Controller.billing_controller import BillingController
 from Controller.client_controller import ClientController
 from Controller.product_controller import ProductController
@@ -16,13 +18,20 @@ class BillingDialog(QDialog):
         self.product_controller = ProductController()
         self.provider_controller = ProviderController()
         self.setWindowTitle("Gestión de Facturación")
-        self.resize(700, 500)
+        self.resize(950, 650)  # Más ancho y alto
         self.setup_ui()
         self.load_initial_data()
 
     def setup_ui(self):
         """Configura la interfaz gráfica"""
         layout = QVBoxLayout()
+
+        # Descripción
+        desc_label = QLabel("Registra compras y ventas. Selecciona el tipo de factura, "
+                            "la entidad (cliente o proveedor), agrega productos y guarda la factura.")
+        desc_label.setWordWrap(True)
+        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
+        layout.addWidget(desc_label)
 
         # Tipo de factura (Compra o Venta) y entidad (Cliente o Proveedor)
         tipo_layout = QHBoxLayout()
@@ -42,6 +51,7 @@ class BillingDialog(QDialog):
         pago_layout = QHBoxLayout()
         pago_layout.addWidget(QLabel("Método de Pago:"))
         self.metodo_pago_input = QLineEdit()
+        self.metodo_pago_input.setPlaceholderText("Ej: Efectivo, Tarjeta, Transferencia")
         pago_layout.addWidget(self.metodo_pago_input)
         layout.addLayout(pago_layout)
 
@@ -53,6 +63,7 @@ class BillingDialog(QDialog):
         self.qty_spin.setMinimum(1)
         self.qty_spin.setMaximum(1000)
         self.add_product_btn = QPushButton("Agregar Producto")
+        self.add_product_btn.setMinimumWidth(150)
         prod_layout.addWidget(QLabel("Proveedor:"))
         prod_layout.addWidget(self.prov_combo)
         prod_layout.addWidget(QLabel("Producto:"))
@@ -64,7 +75,12 @@ class BillingDialog(QDialog):
 
         # Tabla para mostrar los productos añadidos a la factura
         self.products_table = QTableWidget(0, 4)
-        self.products_table.setHorizontalHeaderLabels(["ID", "Producto", "Cantidad", "Precio Unitario"])
+        self.products_table.setMinimumWidth(900)
+        self.products_table.setMinimumHeight(300)
+        self.products_table.setHorizontalHeaderLabels(["ID ProductoProveedor", "Producto", "Cantidad", "Precio Unitario"])
+        self.products_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.products_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.products_table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
         layout.addWidget(self.products_table)
 
         # Mostrar total de la factura
@@ -78,9 +94,12 @@ class BillingDialog(QDialog):
         btn_layout = QHBoxLayout()
         self.save_btn = QPushButton("Guardar Factura")
         self.cancel_btn = QPushButton("Cancelar")
+        self.view_btn = QPushButton("Consultar Facturas")
+        self.save_btn.setMinimumWidth(200)
+        self.cancel_btn.setMinimumWidth(200)
+        self.view_btn.setMinimumWidth(200)
         btn_layout.addWidget(self.save_btn)
         btn_layout.addWidget(self.cancel_btn)
-        self.view_btn = QPushButton("Consultar Facturas")
         btn_layout.addWidget(self.view_btn)
         layout.addLayout(btn_layout)
 
@@ -147,6 +166,21 @@ class BillingDialog(QDialog):
             self.products_table.setItem(row, 1, QTableWidgetItem(item['nombre_prod']))
             self.products_table.setItem(row, 2, QTableWidgetItem(str(item['cantidad_detalle'])))
             self.products_table.setItem(row, 3, QTableWidgetItem(f"${item['precio_unitario_detalle']:.2f}"))
+        header = self.products_table.horizontalHeader()
+        for col in range(self.products_table.columnCount()):
+            header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+        # Centrar texto en encabezados y celdas
+        for col in range(self.products_table.columnCount()):
+            item = self.products_table.horizontalHeaderItem(col)
+            if item:
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        for row in range(self.products_table.rowCount()):
+            for col in range(self.products_table.columnCount()):
+                cell = self.products_table.item(row, col)
+                if cell:
+                    cell.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        # Mostrar el número de filas correctamente en el encabezado vertical
+        self.products_table.setVerticalHeaderLabels([str(i+1) for i in range(len(items))])
 
     def update_total(self):
         """Calcular y mostrar el total de la factura"""
@@ -162,14 +196,6 @@ class BillingDialog(QDialog):
         if not metodo_pago:
             QMessageBox.warning(self, "Error", "Ingrese método de pago.")
             return
-        success = self.billing_controller.save_invoice(tipo, id_cliente, id_prov, metodo_pago)
-        if success:
-            QMessageBox.information(self, "Éxito", "Factura guardada correctamente.")
-            self.billing_controller.reset_invoice()
-            self.accept()
-        else:
-            QMessageBox.critical(self, "Error", "Error al guardar la factura.")
-        
     def view_invoices(self):
         viewer = InvoiceViewerDialog(self)
         viewer.exec()

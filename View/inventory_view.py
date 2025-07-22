@@ -22,11 +22,16 @@ class InventoryDialog(QDialog):
         layout = QVBoxLayout()
 
         # Descripción
+        title = QLabel("Gestión de Inventario")
+        title.setProperty("cssClass", "title")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
         desc_label = QLabel("Registra entradas y salidas de productos en el inventario. "
                             "Selecciona el producto, la cantidad y el tipo de movimiento, luego haz clic en 'Agregar'. "
                             "Guarda los cambios para registrar los movimientos.")
+        desc_label.setProperty("cssClass", "subtitle")
         desc_label.setWordWrap(True)
-        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
         layout.addWidget(desc_label)
 
         # Selección de producto, cantidad y tipo de movimiento
@@ -80,6 +85,12 @@ class InventoryDialog(QDialog):
         btn_layout.addWidget(self.save_btn)
         btn_layout.addWidget(self.cancel_btn)
         layout.addLayout(btn_layout)
+
+        # Botón regresar/cancelar (estilo consistente y más pequeño)
+        self.btn_regresar = QPushButton("Regresar al Menú Principal")
+        self.btn_regresar.setObjectName("btnRegresar")
+        self.btn_regresar.clicked.connect(self.reject)
+        layout.addWidget(self.btn_regresar)
 
         self.setLayout(layout)
         
@@ -145,6 +156,20 @@ class InventoryDialog(QDialog):
         if not self.inventory_controller.movements:
             QMessageBox.warning(self, "Sin movimientos", "No hay movimientos para guardar.")
             return
+        
+        self.inventory_controller.save_movements()
+        QMessageBox.information(self, "Éxito", "Movimientos registrados.")
+        self.inventory_controller.reset_movements()
+        self.accept()
+    
+    def update_stock_label(self):
+        """Actualizar la etiqueta de stock actual"""
+        id_prod = self.product_combo.currentData()
+        if id_prod:
+            stock = self.inventory_controller.get_current_stock(id_prod)
+            self.stock_label.setText(f"Stock actual: {stock}")
+        else:
+            self.stock_label.setText("Stock actual: -")
         
         self.inventory_controller.save_movements()
         QMessageBox.information(self, "Éxito", "Movimientos registrados.")

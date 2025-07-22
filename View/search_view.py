@@ -29,8 +29,9 @@ class SearchDialog(QDialog):
 
         # Título y subtítulo
         title = QLabel("Buscar productos")
-        title.setStyleSheet("font-size: 20px; font-weight: bold;")
+        title.setProperty("cssClass", "title")
         subtitle = QLabel("Filtra por nombre, categoría o ubicación. Deja un campo vacío para ignorar ese filtro.")
+        subtitle.setProperty("cssClass", "subtitle")
         subtitle.setWordWrap(True)
         filter_layout.addWidget(title)
         filter_layout.addWidget(subtitle)
@@ -73,6 +74,12 @@ class SearchDialog(QDialog):
 
         # Conectar botón de búsqueda
         self.search_btn.clicked.connect(self.search_product)
+
+        # Botón regresar (estilo consistente y más pequeño)
+        self.btn_regresar = QPushButton("Regresar al Menú Principal")
+        self.btn_regresar.setObjectName("btnRegresar")
+        self.btn_regresar.clicked.connect(self.reject)
+        filter_layout.addWidget(self.btn_regresar)
 
     def search_product(self):
         """

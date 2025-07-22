@@ -1,25 +1,25 @@
 /* ===== ESTILOS GENERALES ===== */
 * {
-    background-color: #fffef6;
+    background-color: #f8fafc;
     color: #2c3e50;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 16px;
-    padding: 8px;
+    padding: 0px;
 }
 
 /* ===== VENTANA PRINCIPAL ===== */
 QMainWindow {
-    background-color: #fffef6;
+    background-color: #f8fafc;
     padding: 0px;
 }
 
 QWidget {
-    background-color: #fffef6;
+    background-color: #f8fafc;
 }
 
 /* ===== ETIQUETAS ===== */
 QLabel {
-    background-color: #fffef6;
+    background-color: transparent;
     color: #2c3e50;
     font-weight: 500;
     padding: 5px;
@@ -28,38 +28,52 @@ QLabel {
 
 QLabel[objectName="feedback"] {
     color: #e74c3c;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     padding: 8px;
-    background-color: #fffef6;
+    background-color: transparent;
     border: none;
 }
 
+/* ===== TITULOS Y SUBTITULOS ===== */
+QLabel[cssClass="title"] {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a2233;
+    margin-bottom: 10px;
+}
+QLabel[cssClass="subtitle"] {
+    font-size: 17px;
+    color: #6c7a89;
+    margin-bottom: 18px;
+    font-weight: 400;
+}
+
 /* ===== CAMPOS DE ENTRADA ===== */
-QLineEdit {
-    background-color: #f8f1f1;
+QLineEdit, QTextEdit {
+    background-color: #f4f6fb;
     color: #2c3e50;
     border: 2px solid #e8d5d5;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 12px 16px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     selection-background-color: #3498db;
     selection-color: white;
 }
 
-QLineEdit:focus {
+QLineEdit:focus, QTextEdit:focus {
     border: 2px solid #2b3c56;
     background-color: #ffffff;
     outline: none;
 }
 
-QLineEdit:hover {
+QLineEdit:hover, QTextEdit:hover {
     border: 2px solid #bdc3c7;
     background-color: #fdfdfd;
 }
 
-QLineEdit::placeholder {
+QLineEdit::placeholder, QTextEdit::placeholder {
     color: #95a5a6;
     font-style: italic;
 }
@@ -69,15 +83,15 @@ QPushButton {
     background-color: #2b3c56;
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 12px 32px; /* Aumenta el padding horizontal */
-    font-size: 15px;    /* Aumenta el tamaño de fuente */
+    border-radius: 14px;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: 600;
-    min-width: 150px;   /* Aumenta el ancho mínimo */
-    min-height: 44px;   /* Aumenta el alto mínimo */
-    text-transform: none; /* Elimina mayúsculas forzadas */
+    min-width: 110px;
+    min-height: 36px;
+    text-transform: none;
     letter-spacing: 0.5px;
-    white-space: normal; /* Permite varias líneas si es necesario */
+    white-space: normal;
 }
 
 QPushButton:hover {
@@ -93,21 +107,36 @@ QPushButton:disabled {
     color: #7f8c8d;
 }
 
+/* Botón de regresar/cerrar sesión */
+QPushButton#btnRegresar, QPushButton#btnCerrarSesion {
+    font-size: 15px;
+    background-color: #aab2bd;
+    color: #2c3e50;
+    border: none;
+    border-radius: 12px;
+    min-width: 150px;
+    min-height: 36px;
+}
+QPushButton#btnRegresar:hover, QPushButton#btnCerrarSesion:hover {
+    background-color: #cfd8dc;
+}
+
 /* ===== CAJAS DE MENSAJE ===== */
 QMessageBox {
     background-color: #ffffff;
     color: #2c3e50;
     border: 1px solid #bdc3c7;
-    border-radius: 10px;
-    padding: 20px;
-    min-width: 300px;
-    font-size: 14px;
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 320px;
+    font-size: 15px;
+    box-shadow: 0 2px 12px rgba(44,62,80,0.08);
 }
 
 QMessageBox QLabel {
     background-color: #ffffff;
     color: #2c3e50;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     padding: 10px;
     border: none;
@@ -117,12 +146,12 @@ QMessageBox QPushButton {
     background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 12px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
     font-weight: 600;
-    min-width: 80px;
-    min-height: 30px;
+    min-width: 90px;
+    min-height: 34px;
 }
 
 QMessageBox QPushButton:hover {
@@ -135,17 +164,17 @@ QMessageBox QPushButton:pressed {
 
 /* ===== FORMULARIOS ===== */
 QFormLayout {
-    spacing: 15px;
-    margin: 20px;
+    spacing: 18px;
+    margin: 24px;
 }
 
 /* ===== CONTENEDORES ===== */
 QVBoxLayout {
-    spacing: 10px;
+    spacing: 14px;
 }
 
 QHBoxLayout {
-    spacing: 10px;
+    spacing: 14px;
 }
 
 /* ===== EFECTOS ADICIONALES ===== */
@@ -153,7 +182,7 @@ QWidget:focus {
     outline: none;
 }
 
-/* ===== SCROLLBARS (si se necesitan) ===== */
+/* ===== SCROLLBARS ===== */
 QScrollBar:vertical {
     background-color: #ecf0f1;
     width: 12px;
@@ -184,22 +213,24 @@ QToolTip {
     color: white;
     border: 1px solid #2c3e50;
     border-radius: 4px;
-    padding: 5px;
-    font-size: 12px;
+    padding: 7px;
+    font-size: 13px;
 }
 
+/* ===== TABLAS ===== */
 QTableWidget {
-    background-color: #fffef6;
-    border: 1px solid #e8d5d5;
-    border-radius: 8px;
+    background-color: #f4f6fb;
+    border: 1.5px solid #e8d5d5;
+    border-radius: 14px;
     font-size: 15px;
     selection-background-color: #e6e6fa;
     selection-color: #2c3e50;
     gridline-color: #e8d5d5;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.04);
 }
 
 QTableWidget::item {
-    padding: 10px;
+    padding: 12px;
     font-size: 15px;
     color: #2c3e50;
 }
@@ -213,7 +244,8 @@ QHeaderView::section {
     background-color: #f8f1f1;
     color: #2b3c56;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 16px;
     border: 1px solid #e8d5d5;
-    padding: 8px;
+    padding: 10px;
+    border-radius: 8px;
 }

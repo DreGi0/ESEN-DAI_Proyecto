@@ -27,10 +27,15 @@ class BillingDialog(QDialog):
         layout = QVBoxLayout()
 
         # Descripción
+        title = QLabel("Gestión de Facturación")
+        title.setProperty("cssClass", "title")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
         desc_label = QLabel("Registra compras y ventas. Selecciona el tipo de factura, "
                             "la entidad (cliente o proveedor), agrega productos y guarda la factura.")
+        desc_label.setProperty("cssClass", "subtitle")
         desc_label.setWordWrap(True)
-        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
         layout.addWidget(desc_label)
 
         # Tipo de factura (Compra o Venta) y entidad (Cliente o Proveedor)
@@ -102,6 +107,12 @@ class BillingDialog(QDialog):
         btn_layout.addWidget(self.cancel_btn)
         btn_layout.addWidget(self.view_btn)
         layout.addLayout(btn_layout)
+
+        # Botón regresar/cancelar (estilo consistente y más pequeño)
+        self.btn_regresar = QPushButton("Regresar al Menú Principal")
+        self.btn_regresar.setObjectName("btnRegresar")
+        self.btn_regresar.clicked.connect(self.reject)
+        layout.addWidget(self.btn_regresar)
 
         self.setLayout(layout)
 
@@ -185,6 +196,20 @@ class BillingDialog(QDialog):
     def update_total(self):
         """Calcular y mostrar el total de la factura"""
         total = self.billing_controller.calculate_total()
+        self.total_label.setText(f"${total:.2f}")
+
+    def save_invoice(self):
+        """Guardar la factura y sus detalles en la base"""
+        tipo = self.tipo_combo.currentText().lower()
+        id_cliente = self.entity_combo.currentData() if tipo == "venta" else None
+        id_prov = self.entity_combo.currentData() if tipo == "compra" else None
+        metodo_pago = self.metodo_pago_input.text().strip()
+        if not metodo_pago:
+            QMessageBox.warning(self, "Error", "Ingrese método de pago.")
+            return
+    def view_invoices(self):
+        viewer = InvoiceViewerDialog(self)
+        viewer.exec()
         self.total_label.setText(f"${total:.2f}")
 
     def save_invoice(self):

@@ -130,15 +130,15 @@ class ProductWindow(QMainWindow):
         
         # Título
         title = QLabel("Gestión de Productos")
-        title.setStyleSheet("font-size: 24px; font-weight: bold; margin: 10px;")
+        title.setProperty("cssClass", "title")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addWidget(title)
 
         # Descripción
         desc_label = QLabel("Administra los productos de la ferretería. "
                             "Puedes crear, editar, eliminar productos y gestionar sus proveedores.")
+        desc_label.setProperty("cssClass", "subtitle")
         desc_label.setWordWrap(True)
-        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
         main_layout.addWidget(desc_label)
         
         # Botones de acción
@@ -146,21 +146,21 @@ class ProductWindow(QMainWindow):
         button_layout.setSpacing(18)
         
         self.create_btn = QPushButton("Crear Producto")
-        self.edit_btn = QPushButton("Editar Producto")
-        self.delete_btn = QPushButton("Eliminar Producto")
-        self.view_btn = QPushButton("Ver Detalles")
-        self.suppliers_btn = QPushButton("Gestionar Proveedores")
-        self.refresh_btn = QPushButton("Actualizar Lista")
-        self.back_btn = QPushButton("Volver al Menú")
+        self.edit_btn = QPushButton("Editar")
+        self.delete_btn = QPushButton("Eliminar")
+        self.view_btn = QPushButton("Detalles")
+        self.suppliers_btn = QPushButton("Proveedores")
+        self.refresh_btn = QPushButton("Actualizar")
+        self.back_btn = QPushButton("Volver")
         
-        # Ajustar tamaño mínimo y política de expansión para los botones
+        # Ajustar tamaño mínimo solo para estos botones
         for btn in [
             self.create_btn, self.edit_btn, self.delete_btn, self.view_btn,
             self.suppliers_btn, self.refresh_btn, self.back_btn
         ]:
-            btn.setMinimumWidth(220)  # Aumenta el ancho mínimo
-            btn.setMaximumWidth(300)  # Opcional: limita el ancho máximo
-            btn.setMinimumHeight(48)
+            btn.setMinimumWidth(120)
+            btn.setMaximumWidth(180)
+            btn.setMinimumHeight(36)
             btn.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         
         button_layout.addWidget(self.create_btn)

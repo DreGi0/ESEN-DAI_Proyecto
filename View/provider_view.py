@@ -21,10 +21,15 @@ class ProviderDialog(QDialog):
         layout.setSpacing(10)
 
         # --- Descripción ---
+        title = QLabel("Gestión de Proveedores")
+        title.setProperty("cssClass", "title")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title)
+
         desc_label = QLabel("Gestiona los proveedores de la ferretería. "
                             "Puedes registrar nuevos proveedores, editar o eliminar los existentes.")
+        desc_label.setProperty("cssClass", "subtitle")
         desc_label.setWordWrap(True)
-        desc_label.setStyleSheet("font-size: 15px; color: #555; margin-bottom: 10px;")
         layout.addWidget(desc_label)
 
         # --- Tabla de proveedores (Read) ---
@@ -112,10 +117,9 @@ class ProviderDialog(QDialog):
         layout.addWidget(self.del_container)
         layout.addWidget(self.btn_cancelar)
 
-        # Botón regresar (idéntico a clientes)
-        self.btn_regresar = QPushButton("Regresar")
-        self.btn_regresar.setStyleSheet("background-color: #e74c3c; color: white;")
-        self.btn_regresar.setMinimumHeight(48)
+        # Botón regresar (estilo consistente y más pequeño)
+        self.btn_regresar = QPushButton("Regresar al Menú Principal")
+        self.btn_regresar.setObjectName("btnRegresar")
         self.btn_regresar.clicked.connect(self.close)
         layout.addWidget(self.btn_regresar)
 

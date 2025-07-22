@@ -28,13 +28,13 @@ class StartWindow(QMainWindow):
 
         # Título principal
         title = QLabel("Sistema de Gestión\nFerretería Mónaco")
-        title.setStyleSheet("font-size: 28px; font-weight: bold; margin-bottom: 10px; color: #2c3e50;")
+        title.setProperty("cssClass", "title")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
 
         # Subtítulo
         subtitle = QLabel("Selecciona un módulo para comenzar")
-        subtitle.setStyleSheet("font-size: 16px; margin-bottom: 20px; color: #7f8c8d;")
+        subtitle.setProperty("cssClass", "subtitle")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(subtitle)
 
@@ -77,20 +77,7 @@ class StartWindow(QMainWindow):
 
         # Botón cerrar sesión
         logout_btn = QPushButton("Cerrar sesión")
-        logout_btn.setStyleSheet("""
-            QPushButton {
-                font-size: 14px;
-                background-color: #aab2bd;
-                color: #2c3e50;
-                border: none;
-                border-radius: 8px;
-                min-width: 180px;
-                min-height: 40px;
-            }
-            QPushButton:hover {
-                background-color: #cfd8dc;
-            }
-        """)
+        logout_btn.setObjectName("btnCerrarSesion")
         logout_btn.clicked.connect(self.logout)
         layout.addWidget(logout_btn, alignment=Qt.AlignmentFlag.AlignCenter)
 

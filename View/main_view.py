@@ -9,6 +9,7 @@ from View.inventory_view import InventoryDialog
 from View.provider_view import ProviderDialog
 from View.client_view import ClientDialog
 from View.search_view import SearchDialog
+from View.report_view import ReportDialog
 
 class StartWindow(QMainWindow):
     """Ventana principal de inicio del sistema"""
@@ -64,8 +65,10 @@ class StartWindow(QMainWindow):
             ("Proveedores", self.open_provider_module),
             ("Clientes", self.open_client_module),
             ("Búsqueda", self.open_search_module),
+            ("Reporte de Ventas", self.open_report_module)
+
         ]
-        positions = [(i, j) for i in range(2) for j in range(3)]
+        positions = [(i, j) for i in range(3) for j in range(3)]
         for pos, (text, slot) in zip(positions, btns):
             btn = QPushButton(text)
             btn.setStyleSheet(button_style)
@@ -112,6 +115,12 @@ class StartWindow(QMainWindow):
         """Abrir ventana de búsqueda"""
         search_window = SearchDialog(self)
         search_window.exec()
+    
+    def open_report_module(self):
+        """Abrir ventana de reporte de ventas"""
+        report_view = ReportDialog(self)
+        report_view.exec()
+
 
     def logout(self):
         self.close()

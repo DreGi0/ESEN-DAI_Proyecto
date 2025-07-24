@@ -35,13 +35,21 @@ class ReportDialog(QDialog):
         for i, (producto, ventas) in enumerate(data.items()):
             ax.plot(meses, ventas, marker='o', label=producto, color=colores[i % len(colores)])
 
-        ax.set_title("Ventas mensuales por producto")
-        ax.set_xlabel("Mes")
-        ax.set_ylabel("Total en dólares $")
+        for label in ax.get_xticklabels():
+            label.set_fontweight('bold')
+            label.set_color('#1a2233')
+
+        for label in ax.get_yticklabels():
+            label.set_fontweight('bold')
+            label.set_color('#1a2233')
+
+        ax.set_title("Ventas por producto", fontsize=14, fontweight='bold', color='#1a2233')
+        ax.set_xlabel("Meses", fontsize=12, fontweight='bold', color='#1a2233')
+        ax.set_ylabel("Total Ventas ($)", fontsize=12, fontweight='bold', color='#1a2233')
         ax.legend(
         title="Producto",
         loc='center left',
-        bbox_to_anchor=(1.0, 0.5),
+        bbox_to_anchor=(1.0, 0.4),
         borderaxespad=0.0)
         ax.grid(True, linestyle='--', alpha=0.6)
         self.figure.tight_layout() 
